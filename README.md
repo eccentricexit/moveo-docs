@@ -35,9 +35,9 @@ The backend:
 
 ### Root
 
-Returns a SPA that allows a user to view:
+Serves a SPA that allows a user to view:
 - User information;
-- Trips data.
+- Trip data.
 
 ### User endpoint
 
@@ -100,6 +100,8 @@ If there are no running trips for that userId, the endpoint returns an empty obj
 ```
 
 ## Mobile App
+
+React Native or jsonette.
 
 ### User Stories
 - As a user I can log into the app.
