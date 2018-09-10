@@ -1,140 +1,127 @@
 # car-control (WIP)
 
-## DB
-
-DB structure
-
-```
-+-----------+                              +--------------+
-|users      |                              |running       |
-+-----------+                              +--------------+
-|id         +---+------------------------->+userID        |
-|login      |   |                      +-->+tripID        |
-|password   |   |                      |   +--------------+
-+-----------+   |                      |
-                |  +---------------+   |
-                |  |trips          |   |
-                |  +---------------+   |
-                |  |tripID         +---+
-                +->+userID         |
-                   |latitude       |
-                   |longitude      |
-                   |time           |
-                   |odometerPicPath|
-                   +---------------+
-
-```
-
 ## Backend
 
-The backend: 
+The backend:
 - Stores images on the file system;
-- Stores trips and image paths on a local db;
-- Stores user credentials
-- Retrieves trip and user data from db/filesystem
+- Stores and serves user state for syncing.
+- Serves a SPA for viewing data.
+
+### DB | NoSQL.
+
+```
+#### User credentials
+[login]:{
+    login,
+    pwdHash: sha256(password)
+}
+
+#### User state
+[login]:{
+    trips:[{
+        plate
+        start:{
+            latitude,
+            longitude,
+            odometerPicHash,
+            carPlate,
+            time
+        },
+        finish:{
+            latitude,
+            longitude,
+            odometerPicHash,
+            carPlate,
+            time
+        }
+    }]
+}
+
+#### Picture storage
+[picHash]:'picture/path/in/filesystem/<picname>.jpg'
+
+```
 
 ### Root
 
-Serves a SPA that allows a user to view:
-- User information;
-- Trip data.
+Serves a SPA that allows anyone to view:
+- List of users
+    - Row shows: | login |
 
-### User endpoint
+Clicking on a user shows the user detail view:
+- User login
+- List of trips ordered by date, most recent first.
+    - | Car plate |
 
-#### POST
+Clicking on a trip shows the trip details:
+- Start time
+- Start position (map pin)
+- Odometer picture
+- End time
+- Stop position (map pin)
+- Odometer picture
 
-Creates a user for a given user and password.
 
-#### GET returns list of users
+### Endpoints
+
+#### POST /user
+
+Creates a user for a given user and password if the user is not taken.
+
+#### GET /user
 
 ```
 [
-    {
-        userId: 1,
-        login: joao.silva
-    },
-    {
-        userId: 2,
-        login: raissa.andrade
-    }
+    'joao.silva',
+    'raissa.andrade'
 ]
 ```
 
-### Login endpoint 
+#### GET /user/:login
 
-#### POST
-Accepts POST requests with login and password and returns a userId credentials are valid.
+Returns latest state for a given user
 
-### Trip endpoint
+#### POST /user/:login
 
-#### POST 
-Accepts POST requests if a valid userId is provided. 
+Merges state provided in the BODY and saves it to the db.
 
-```
-{
-    userId,
-    latitude,
-    longitude,
-    time,
-    pictureBlob
-}
-```
+#### POST /authenticate
 
-#### GET with userId
-
-Returns the start trip information for given userID:
-
-```
-{
-    userId,
-    latitude,
-    longitude,
-    time,
-    picturePath
-}
-```
-
-If there are no running trips for that userId, the endpoint returns an empty object:
-```
-{}
-```
+Returns the user state if login and password provided in BODY are valid.
 
 ## Mobile App
 
-React Native or jsonette.
+React Native.
 
 ### User Stories
-- As a user I can log into the app.
+- As a user I can log into the app with my credentials.
 - As user I can press start to begin a trip.
+    - The start button is enabled once I enter a licence plate
     - In order to start a trip, the app requests that I take a picture of the odometer.
-    - A user can take a picture and accept a picture he took.
-    - A user can reject a picture he took to try again.
-    - A user can cancel the start operation.
-- As a user, I can see a persistant notification once I start a trip.
-- A user can press finish to end a trip.
+- As user can press finish to end a trip.
     - In order to finish a trip, the app requests that I take a picture of the odometer.
-    - A user can take a picture and accept a picture he took.
-    - A user can reject a picture he took to try again.
-    - A user can cancel the start operation.
 
 ### Behaviour
 
 #### Main Screen
-
-The main screen displays either a "Start trip" or an "End trip" button. To decide which button to display, the app makes a request to an authenticated endpoint to check if there as an ongoing trip for this user.
+1- Once a user logs in, the app syncs redux with the backend if internet connection is available.
+2- The main screen displays either a "Start trip" or an "End trip" button. To decide which button to display, the app checks localStorage to see if there as an ongoing trip for this user.
 
 #### Start and End Trip
-After the user takes a picture, the app POST's some information to an api endpoint:
+After the user takes a picture, the app stores the picture locally and updates the state with information:
 
 ```
 latitude: 0.23327753,
 longitude: -0.2566,
 time: 112351231,
-pictureBlob,
-userId
+localPicPath,
+carPlate
 ```
+
+The app persists and restores the redux state from local storage.
 
 ### Requirements
 - The app will only run if the user grants location, storage and camera usage permissions.
 - The user must finish a previous trip before starting a new one.
+- The app will maintain a local state and sync with the endpoint if network is available.
 - All strings displayed on the UI must be ready for localization.
