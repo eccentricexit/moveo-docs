@@ -19,7 +19,7 @@ The backend:
 #### User state
 [login]:{
     trips:{
-        [sha2(trip)]:{
+        [tripId]:{
             plate
             start:{
                 latitude,
@@ -131,7 +131,32 @@ carPlate
 
 The app persists and restores the redux state from local storage.
 
-See format of the redux store must be equal to the state saved on the NoSQL db for easy serialization and deserialization, with the exception being `odometerPicHash` (which is only useful on the backend and meaninless on clients) and `localPicPath` which is used on clients only.
+See format of the redux store must be equal to the state saved on the NoSQL db for easy serialization and deserialization, with the exception being `odometerPicHash` (which is only useful on the backend and meaninless on clients) and `localPicPath` which is used on clients only:
+
+```
+[login]:{
+    trips:{
+        [tripId]:{
+            plate
+            start:{
+                latitude,
+                longitude,
+                localPicPath,
+                carPlate,
+                time
+            },
+            finish:{
+                latitude,
+                longitude,
+                localPicPath,
+                carPlate,
+                time
+            }
+        }
+    }
+```
+
+`localPicPath` should be removed before sending to the backend.
 
 ### Requirements
 - The app will only run if the user grants location, storage and camera usage permissions.
