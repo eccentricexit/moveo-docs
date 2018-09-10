@@ -1,4 +1,4 @@
-# car-control (WIP)
+# Moveo
 
 ## Backend
 
@@ -7,7 +7,7 @@ The backend:
 - Stores and serves user state for syncing.
 - Serves a SPA for viewing data.
 
-### DB | NoSQL.
+### DB | NoSQL
 
 ```
 #### User credentials
@@ -18,23 +18,25 @@ The backend:
 
 #### User state
 [login]:{
-    trips:[{
-        plate
-        start:{
-            latitude,
-            longitude,
-            odometerPicHash,
-            carPlate,
-            time
-        },
-        finish:{
-            latitude,
-            longitude,
-            odometerPicHash,
-            carPlate,
-            time
+    trips:{
+        [sha2(trip)]:{
+            plate
+            start:{
+                latitude,
+                longitude,
+                odometerPicHash,
+                carPlate,
+                time
+            },
+            finish:{
+                latitude,
+                longitude,
+                odometerPicHash,
+                carPlate,
+                time
+            }
         }
-    }]
+    }
 }
 
 #### Picture storage
@@ -83,11 +85,14 @@ Returns latest state for a given user
 
 #### POST /user/:login
 
-Merges state provided in the BODY and saves it to the db.
+Accepts a user`s state and pictures provided in the BODY and saves the data to the db and file system.
 
 #### POST /authenticate
 
-Returns the user state if login and password provided in BODY are valid.
+Returns: 
+- `true` if the crendentials are valid and there are no ongoing trips for the user.
+- the state of the last trip if credentials are valid and there is a trip for this user.
+- `false` if crendentials are invalid.
 
 ## Mobile App
 
@@ -104,8 +109,14 @@ React Native.
 ### Behaviour
 
 #### Main Screen
-1- Once a user logs in, the app syncs redux with the backend if internet connection is available.
+1- Once a user logs in, the app:
+    - Initializes redux with state received from the backend (if any)
+    - Replaces localstorage with the recent redux state built from the backend.
 2- The main screen displays either a "Start trip" or an "End trip" button. To decide which button to display, the app checks localStorage to see if there as an ongoing trip for this user.
+
+#### Syncing
+
+The app should upload it's state to the backend once connectivity is accquired. This also means uploading pictures of trips.
 
 #### Start and End Trip
 After the user takes a picture, the app stores the picture locally and updates the state with information:
@@ -120,8 +131,11 @@ carPlate
 
 The app persists and restores the redux state from local storage.
 
+See format of the redux store must be equal to the state saved on the NoSQL db for easy serialization and deserialization, with the exception being `odometerPicHash` (which is only useful on the backend and meaninless on clients) and `localPicPath` which is used on clients only.
+
 ### Requirements
 - The app will only run if the user grants location, storage and camera usage permissions.
 - The user must finish a previous trip before starting a new one.
 - The app will maintain a local state and sync with the endpoint if network is available.
+- All code and comments in English.
 - All strings displayed on the UI must be ready for localization.
