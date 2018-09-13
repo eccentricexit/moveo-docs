@@ -235,9 +235,11 @@ This endpoint:
 5. Inserts an entry on the `picturePath` document, mapping a picture's hash to it's path on the file system;
 ```
 
-> Tip: Use [multer](https://github.com/expressjs/multer) to parse the request: 
+> Tip: Use [multer](https://github.com/expressjs/multer) to parse the request:
+```
 - `body.files` is an array with two images, the first being the start picture and the second being the end picture.
 - `body.trip` is a stringified JSON object with information about the trip as follows:
+```
 
 
 1. The parsed JSON object looks as follows:
