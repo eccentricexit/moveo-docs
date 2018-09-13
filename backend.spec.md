@@ -270,7 +270,7 @@ trips[tripId].start.odometerPicHash = md5(body.files[0])
 
 and
 
-trips[tripId].start.odometerPicHash = md5(body.files[1])
+trips[tripId].finish.odometerPicHash = md5(body.files[1])
 ```
 
 3. Update the `userState` document on the database for that user with the new trip data:
