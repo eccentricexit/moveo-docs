@@ -316,13 +316,16 @@ The database is a NoSQL database with 3 documents:
 - `picturePath`: Maps a picture`s md5 hash to its location.
 
 ### users
+```
 [login]:{
     login,
     pwdHash,
     salt
 }
+```
 
 ### userState
+```
 [login]:{
     trips:{
         [tripId]:{
@@ -342,8 +345,11 @@ The database is a NoSQL database with 3 documents:
         }
     }
 }
+```
 
 ### picturePath
+
+```
 [picHash]:'picture/path/in/filesystem/<picname>.jpg'
 
 ```
