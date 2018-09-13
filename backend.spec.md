@@ -13,7 +13,6 @@ See frontend.spec.md for details on the SPA.
         - [POST `/user`](#post-user)
         - [POST `/authenticate`](#post-authenticate)
         - [GET `/user/:login`](#get-userlogin)
-        - [GET `/user/:login/:tripId`](#get-userlogintripid)
         - [GET `/picture/:hash`](#get-picturehash)
         - [POST `/user/:login`](#post-userlogin)
     - [DB](#db)
@@ -151,10 +150,6 @@ otherwise the endpoint returns:
 
 `curl http://localhost/api/v1/user/joao.silva`
 
-parameters:
-```
-login: the login of a user
-```
 returns: a JSON object for the user in the format
 ```
 {
@@ -179,7 +174,6 @@ returns: a JSON object for the user in the format
     }
 }
 ```
-
 where
 - `tripID` is a uuid v4 generated on the client.
 - `odometerPicHash` is the md5 hash of the picture taken.
@@ -210,13 +204,20 @@ An example of a returned object:
 }
 ```
 
-### GET `/user/:login/:tripId`
-
-> TODO
-
 ### GET `/picture/:hash`
 
-> TODO
+`curl http://localhost/api/v1/picture/de0729c647b7f6d007466d233a6037fd`
+
+
+if `hash` does not exist in `picturePath` document, returns:
+```
+{
+    status: 404,
+    response: 'invalid login and password combination'
+}
+```
+
+otherwise the endpoint returns the image.
 
 ### POST `/user/:login`
 
