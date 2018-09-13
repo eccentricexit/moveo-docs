@@ -14,6 +14,7 @@ See frontend.spec.md for details on the SPA.
         - [POST `/authenticate`](#post-authenticate)
         - [GET `/user/:login`](#get-userlogin)
         - [GET `/user/:login/:tripId`](#get-userlogintripid)
+        - [GET `/picture/:hash`](#get-picturehash)
         - [POST `/user/:login`](#post-userlogin)
     - [DB](#db)
         - [users](#users)
@@ -93,7 +94,7 @@ If the login is available, stores the following information on the `user` docume
 ```
 
 where:
-- `salt` is a large number generated with a cryptographicaly secure random number generator.
+- `salt` is a large number generated with a cryptographically secure random number generator.
 - `pwdHash` is the sha256 hash of the password concatenated with the salt.
 
 once the db responds that it stored the data successfully, the endpoint should return:
@@ -213,6 +214,10 @@ An example of a returned object:
 
 > TODO
 
+### GET `/picture/:hash`
+
+> TODO
+
 ### POST `/user/:login`
 
 Accepts `multipart/form-data` to upload a user's trip data along with two images.
@@ -224,7 +229,7 @@ This endpoint:
 2. Builds an object from the trip data that includes the pictures' hashes;
 3. Updates the `userState` document with the object created in `4`;
 4. Saves the picture to the file system;
-5. Inserts an entry on the `picturePath` document, maping a picture's hash to it's path on the file system;
+5. Inserts an entry on the `picturePath` document, mapping a picture's hash to it's path on the file system;
 ```
 
 > Tip: Use [multer](https://github.com/expressjs/multer) to parse the request: 
@@ -252,7 +257,7 @@ This endpoint:
 }
 ```
 
-2. Once all the endpoint has both files, it calculates the md5 hash for each picture and stores them on the a the parsed object:
+1. Once all the endpoint has both files, it calculates the md5 hash for each picture and stores them on an object:
 
 Example:
 ```
@@ -296,7 +301,7 @@ trips[tripId].start.odometerPicHash = md5(body.files[1])
 Example:
 ```
 '08afd6f9ae0c6017d105b4ce580de885':'/joao.silva/478c51fe/1536843597.jpg'
-'08afd6f9ae0c6017d105b4ce580de885':'/joao.silva/de0729c6/1536846186.jpg'
+'de0729c647b7f6d007466d233a6037fd':'/joao.silva/de0729c6/1536846186.jpg'
 ```
 
 ## DB
@@ -305,7 +310,7 @@ The database is a NoSQL database with 3 documents:
 
 - `users`: Stores user credential data.
 - `userState`: Stores user state information.
-- `picturePath`: Maps a picture`s md5 hash to it's location.
+- `picturePath`: Maps a picture`s md5 hash to its location.
 
 ### users
 [login]:{
