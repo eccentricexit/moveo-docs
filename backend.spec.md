@@ -225,9 +225,9 @@ otherwise the endpoint returns the image.
 
 Accepts `multipart/form-data` to upload a user's trip data along with two images.
 
-```
 This endpoint:
 
+```
 1. Parses the stringified JSON object on `body.trip`;
 2. Builds an object from the trip data that includes the pictures' hashes;
 3. Updates the `userState` document with the object created in `4`;
