@@ -1,49 +1,5 @@
 # Moveo
 
-## Backend
-
-The backend:
-- Stores images on the file system;
-- Stores and serves user state for syncing.
-- Serves a SPA for viewing data.
-
-### DB | NoSQL
-
-```
-#### User credentials
-[login]:{
-    login,
-    pwdHash: sha256(password)
-}
-
-#### User state
-[login]:{
-    trips:{
-        [tripId]:{
-            plate
-            start:{
-                latitude,
-                longitude,
-                odometerPicHash,
-                carPlate,
-                time
-            },
-            finish:{
-                latitude,
-                longitude,
-                odometerPicHash,
-                carPlate,
-                time
-            }
-        }
-    }
-}
-
-#### Picture storage
-[picHash]:'picture/path/in/filesystem/<picname>.jpg'
-
-```
-
 ### Root
 
 Serves a SPA that allows anyone to view:
@@ -126,7 +82,7 @@ latitude: 0.23327753,
 longitude: -0.2566,
 time: 112351231,
 localPicPath,
-carPlate
+plate
 ```
 
 The app persists and restores the redux state from local storage.
@@ -142,14 +98,12 @@ See format of the redux store must be equal to the state saved on the NoSQL db f
                 latitude,
                 longitude,
                 localPicPath,
-                carPlate,
                 time
             },
             finish:{
                 latitude,
                 longitude,
                 localPicPath,
-                carPlate,
                 time
             }
         }
