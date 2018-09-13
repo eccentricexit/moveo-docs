@@ -1,4 +1,4 @@
-# moveo frontend
+# moveo | frontend
 
 The frontend is a single page application that displays information fetched from the backend.
 

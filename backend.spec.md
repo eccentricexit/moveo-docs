@@ -1,4 +1,4 @@
-# moveo backend
+# moveo | backend
 
 > Server of static SPA and api for creating users, fetching trip information and downloading images.
 
@@ -6,7 +6,9 @@ See frontend.spec.md for details on the SPA.
 
 > **Important**: As of version 0.1.0 none of the endpoints are authenticated. The `/authenticate` endpoint is only a convenience for clients.
 
-- [moveo backend](#moveo-backend)
+## Table Of Contents
+- [moveo | backend](#moveo--backend)
+    - [Table Of Contents](#table-of-contents)
     - [API](#api)
         - [GET `/`](#get)
         - [GET `/user`](#get-user)
