@@ -42,7 +42,7 @@ returns: a JSON object with an array of user objects:
     response: [
         {
             login
-        }        
+        }
     ]
 }
 ```
@@ -103,7 +103,7 @@ once the db responds that it stored the data successfully, the endpoint should r
 ```
 {
     status: 200,
-    response: { 
+    response: {
         login: [login]
     }
 }
@@ -141,7 +141,7 @@ otherwise the endpoint returns:
 
 ```
     status: 200,
-    response: { 
+    response: {
         [login]: {
             login
         }
@@ -250,7 +250,7 @@ This endpoint:
         plate
         start:{
             latitude,
-            longitude,                
+            longitude,
             time
         },
         finish:{
