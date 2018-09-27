@@ -1,6 +1,13 @@
 # moveo | roadmap
 
-v1 - trip tracking system
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+[![git-flow friendly](https://img.shields.io/badge/git-flow-brightgreen.svg)](https://danielkummer.github.io/git-flow-cheatsheet/index.html)
+
+> Holds system-wide documentation and roadmap
+
+
+## v1 scope
+ - trip tracking system
 
 ----
 
